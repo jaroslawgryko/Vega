@@ -10,6 +10,7 @@ namespace Vega.Mapping
         {
             CreateMap<Marka, MarkaResource>();
             CreateMap<Model, ModelResource>();
+            CreateMap<Atrybut, AtrybutResource>();
         }
     }
 }
