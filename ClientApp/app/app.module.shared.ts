@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
+import { PojazdService } from './components/app/services/pojazd.service';
+
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
+import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +19,8 @@ import { CounterComponent } from './components/counter/counter.component';
         NavMenuComponent,
         CounterComponent,
         FetchDataComponent,
-        HomeComponent
+        HomeComponent,
+        PojazdFormComponent
     ],
     imports: [
         CommonModule,
@@ -24,11 +28,15 @@ import { CounterComponent } from './components/counter/counter.component';
         FormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: 'pojazdy/new', component: PojazdFormComponent },            
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
         ])
+    ],
+    providers: [
+        PojazdService
     ]
 })
 export class AppModuleShared {

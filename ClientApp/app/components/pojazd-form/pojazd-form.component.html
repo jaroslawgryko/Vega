@@ -1,0 +1,49 @@
+<h1>Nowy Pojazd</h1>
+<form>
+  <div class="form-group">
+    <label for="marka">Marka</label>
+    <select id="marka" class="form-control" 
+        (change)="onMarkaChange()" [(ngModel)]="pojazd.marka" name="marka">
+      <option value=""></option>
+      <option *ngFor="let m of marki" value="{{ m.id }}">{{ m.nazwa }}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="model">Model</label>
+    <select id="model" class="form-control">
+      <option value=""></option>
+      <option *ngFor="let m of modele" value="{{ m.id }}">{{ m.nazwa }}</option>
+    </select>
+  </div>
+
+  <p>Czy pojazd jest zarejstrowany?</p>  
+  <label for="registered" class="radio-inline">
+    <input type="radio" name="isRegistered" id="registered" value="true">Tak
+  </label>  
+  <label for="notRegistered" class="radio-inline">
+    <input type="radio" name="isRegistered" id="notRegistered" value="false">Nie
+  </label>
+  
+  <h2>Atrybuty</h2>
+  <div *ngFor="let a of atrybuty" class="checbox">
+    <label for="atrybut{{a.id}}">
+      <input type="checkbox" id="atrybut{{ a.id }}"> {{ a.nazwa }}
+    </label>
+  </div>
+
+  <h2>Kontakt</h2>
+  <div class="form-group">
+    <label for="kontaktNazwa">Nazwa</label>
+    <input id="kontaktNazwa" type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="kontaktTelefon">Telefon</label>
+    <input id="kontaktTelefon" type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="kontaktEmail">Email</label>
+    <input id="kontaktEmail" type="text" class="form-control">
+  </div>
+
+  <button class="btn btn-primary">Zapisz</button>
+</form>
