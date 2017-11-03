@@ -12,5 +12,12 @@ namespace Vega.Persistence
         : base(options)
     {
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<PojazdAtrybut>().HasKey(
+        pa => new { pa.PojazdId, pa.AtrybutId }
+      );
+    }
   }
 }
