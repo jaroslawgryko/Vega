@@ -22,11 +22,11 @@ namespace Vega.Models
         [StringLength(255)]
         public string KontaktTelefon { get; set; }
         public DateTime OstatniaZmiana { get; set; }
-        public ICollection<PojazdAtrybut> PojazdAtrybuty { get; set; }
+        public ICollection<PojazdAtrybut> Atrybuty { get; set; }
 
         public Pojazd()
         {
-            PojazdAtrybuty = new Collection<PojazdAtrybut>();
+            Atrybuty = new Collection<PojazdAtrybut>();
         }
     }
 }

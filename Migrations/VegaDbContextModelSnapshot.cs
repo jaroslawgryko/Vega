@@ -132,7 +132,7 @@ namespace Vega.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Vega.Models.Pojazd", "Pojazd")
-                        .WithMany("PojazdAtrybuty")
+                        .WithMany("Atrybuty")
                         .HasForeignKey("PojazdId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

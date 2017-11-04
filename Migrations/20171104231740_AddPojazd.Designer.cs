@@ -11,7 +11,7 @@ using Vega.Persistence;
 namespace Vega.Migrations
 {
     [DbContext(typeof(VegaDbContext))]
-    [Migration("20171103222436_AddPojazd")]
+    [Migration("20171104231740_AddPojazd")]
     partial class AddPojazd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,7 +133,7 @@ namespace Vega.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Vega.Models.Pojazd", "Pojazd")
-                        .WithMany("PojazdAtrybuty")
+                        .WithMany("Atrybuty")
                         .HasForeignKey("PojazdId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
