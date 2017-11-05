@@ -7,6 +7,7 @@ namespace Vega.Persistence
   {
     public DbSet<Pojazd> Pojazdy { get; set; }
     public DbSet<Marka> Marki { get; set; }
+    public DbSet<Model> Modele { get; set; }
     public DbSet<Atrybut> Atrybuty { get; set; }
     
     public VegaDbContext(DbContextOptions<VegaDbContext> options)

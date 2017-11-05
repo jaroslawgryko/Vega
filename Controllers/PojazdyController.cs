@@ -22,6 +22,16 @@ namespace Vega.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePojazd([FromBody] PojazdResource pojazdResource)
         {
+            //server side validation
+            if (!ModelState.IsValid)                //validation against domain model
+                return BadRequest(ModelState);
+
+            // if (true)
+            // {
+            //     ModelState.AddModelError("...", "error"); // against some b. rull
+            //     return BadRequest(ModelState);
+            // }
+
             var pojazd = mapper.Map<PojazdResource, Pojazd>(pojazdResource);
             pojazd.OstatniaZmiana = DateTime.Now;
 

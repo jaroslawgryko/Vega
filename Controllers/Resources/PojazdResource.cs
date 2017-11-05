@@ -12,6 +12,7 @@ namespace Vega.Controllers.Resources
         public int Id { get; set; }
         public int ModelId { get; set; }
         public bool CzyZarejestrowany { get; set; }
+        [Required]
         public KontaktResources Kontakt { get; set; }
         public ICollection<int> Atrybuty { get; set; }
 
