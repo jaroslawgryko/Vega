@@ -79,6 +79,19 @@ namespace Vega.Controllers
 
             return Ok(id);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPojazd(int id)
+        {
+            var pojazd = await context.Pojazdy.Include(p => p.Atrybuty).SingleOrDefaultAsync(p => p.Id == id);
+
+            if(pojazd == null)
+                return NotFound();
+            
+            var pojazdResource = mapper.Map<Pojazd, PojazdResource>(pojazd);
+
+            return Ok(pojazdResource);
+        }
         
     }
 }
