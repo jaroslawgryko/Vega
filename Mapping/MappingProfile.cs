@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vega.Controllers.Resources;
@@ -21,10 +22,25 @@ namespace Vega.Mapping
 
             //API Resources to Domain
             CreateMap<PojazdResource, Pojazd>()
+            .ForMember(p => p.Id, opt => opt.Ignore())
             .ForMember(p => p.KontaktNazwa, opt => opt.MapFrom(pr => pr.Kontakt.Nazwa))
             .ForMember(p => p.KontaktEmail, opt => opt.MapFrom(pr => pr.Kontakt.Email))
             .ForMember(p => p.KontaktTelefon, opt => opt.MapFrom(pr => pr.Kontakt.Telefon))
-            .ForMember(p => p.Atrybuty, opt => opt.MapFrom(pr => pr.Atrybuty.Select(id => new PojazdAtrybut { AtrybutId = id } )));
+            .ForMember(p => p.Atrybuty, opt => opt.Ignore())
+            .AfterMap((pr, p) => {
+                // Remove unselected atrybuty
+                
+                var removedAtrybuty = p.Atrybuty.Where(a => !pr.Atrybuty.Contains(a.AtrybutId));               
+                foreach (var a in removedAtrybuty)
+                    p.Atrybuty.Remove(a);
+
+                // Add new atrybuty
+
+                var addedAtrybuty = pr.Atrybuty.Where(id => !p.Atrybuty.Any(a => a.AtrybutId == id)).Select(id => new PojazdAtrybut { AtrybutId = id });
+                foreach (var a in addedAtrybuty)
+                    p.Atrybuty.Add(a);
+
+            });
         }
     }
 }

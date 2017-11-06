@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Vega.Controllers.Resources;
 using Vega.Models;
 using Vega.Persistence;
@@ -42,5 +43,24 @@ namespace Vega.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePojazd(int id, [FromBody] PojazdResource pojazdResource)
+        {
+            //server side validation
+            if (!ModelState.IsValid)                //validation against domain model
+                return BadRequest(ModelState);
+
+            var pojazd = await context.Pojazdy.Include(p => p.Atrybuty).SingleOrDefaultAsync(p => p.Id == id);
+            mapper.Map<PojazdResource, Pojazd>(pojazdResource, pojazd);
+            pojazd.OstatniaZmiana = DateTime.Now;
+
+            await context.SaveChangesAsync();
+
+            var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
+
+            return Ok(result);
+        }
+        
     }
 }
