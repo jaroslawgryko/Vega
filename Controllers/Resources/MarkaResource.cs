@@ -4,14 +4,12 @@ using Vega.Models;
 
 namespace Vega.Controllers.Resources
 {
-    public class MarkaResource
+    public class MarkaResource : KeyValuePairResource
     {
-        public int Id { get; set; } 
-        public string Nazwa { get; set; }
-        public ICollection<ModelResource> Modele { get; set; }
+        public ICollection<KeyValuePairResource> Modele { get; set; }
         public MarkaResource()
         {
-            Modele = new Collection<ModelResource>();
+            Modele = new Collection<KeyValuePairResource>();
         }        
     }
 }

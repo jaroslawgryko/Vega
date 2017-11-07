@@ -21,11 +21,11 @@ namespace Vega.Controllers
         }
 
         [HttpGet("/api/atrybuty")]
-        public async Task<IEnumerable<AtrybutResource>> GetAtrybuty()
+        public async Task<IEnumerable<KeyValuePairResource>> GetAtrybuty()
         {
             var atrybuty = await context.Atrybuty.ToListAsync();
 
-            return mapper.Map<List<Atrybut>, List<AtrybutResource>>(atrybuty);
+            return mapper.Map<List<Atrybut>, List<KeyValuePairResource>>(atrybuty);
         }
     }
 }
