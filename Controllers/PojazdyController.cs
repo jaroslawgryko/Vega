@@ -39,7 +39,14 @@ namespace Vega.Controllers
             context.Pojazdy.Add(pojazd);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Pojazd, SavePojazdResource>(pojazd);
+            pojazd = await context.Pojazdy
+                .Include(p => p.Atrybuty)
+                    .ThenInclude(pa => pa.Atrybut)
+                .Include(p => p.Model)
+                    .ThenInclude(m => m.Marka)
+                .SingleOrDefaultAsync(p => p.Id == pojazd.Id);
+
+            var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
             return Ok(result);
         }
@@ -51,7 +58,12 @@ namespace Vega.Controllers
             if (!ModelState.IsValid)                //validation against domain model
                 return BadRequest(ModelState);
 
-            var pojazd = await context.Pojazdy.Include(p => p.Atrybuty).SingleOrDefaultAsync(p => p.Id == id);
+            var pojazd = await context.Pojazdy
+                .Include(p => p.Atrybuty)
+                    .ThenInclude(pa => pa.Atrybut)
+                .Include(p => p.Model)
+                    .ThenInclude(m => m.Marka)
+                .SingleOrDefaultAsync(p => p.Id == id);
 
             if(pojazd == null)
                 return NotFound();
@@ -61,7 +73,7 @@ namespace Vega.Controllers
 
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Pojazd, SavePojazdResource>(pojazd);
+            var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
             return Ok(result);
         }
