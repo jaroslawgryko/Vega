@@ -16,12 +16,18 @@ namespace Vega.Mapping
             CreateMap<Model, ModelResource>();
             CreateMap<Atrybut, AtrybutResource>();
 
-            CreateMap<Pojazd, PojazdResource>()
+            CreateMap<Pojazd, SavePojazdResource>()
             .ForMember(pr => pr.Kontakt, opt => opt.MapFrom(p => new KontaktResources { Nazwa = p.KontaktNazwa, Email = p.KontaktEmail, Telefon = p.KontaktTelefon} ))
             .ForMember(pr => pr.Atrybuty, opt => opt.MapFrom(p => p.Atrybuty.Select(pa => pa.AtrybutId)) );
 
+            CreateMap<Pojazd, PojazdResource>()
+            .ForMember(pr => pr.Marka, opt => opt.MapFrom(p => p.Model.Marka))
+            .ForMember(pr => pr.Kontakt, opt => opt.MapFrom(p => new KontaktResources { Nazwa = p.KontaktNazwa, Email = p.KontaktEmail, Telefon = p.KontaktTelefon} ))
+            .ForMember(pr => pr.Atrybuty, opt => opt.MapFrom(p => p.Atrybuty.Select(pa => new AtrybutResource { Id = pa.Atrybut.Id, Nazwa = pa.Atrybut.Nazwa })) );            
+
+
             //API Resources to Domain
-            CreateMap<PojazdResource, Pojazd>()
+            CreateMap<SavePojazdResource, Pojazd>()
             .ForMember(p => p.Id, opt => opt.Ignore())
             .ForMember(p => p.KontaktNazwa, opt => opt.MapFrom(pr => pr.Kontakt.Nazwa))
             .ForMember(p => p.KontaktEmail, opt => opt.MapFrom(pr => pr.Kontakt.Email))

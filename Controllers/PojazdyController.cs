@@ -21,7 +21,7 @@ namespace Vega.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePojazd([FromBody] PojazdResource pojazdResource)
+        public async Task<IActionResult> CreatePojazd([FromBody] SavePojazdResource pojazdResource)
         {
             //server side validation
             if (!ModelState.IsValid)                //validation against domain model
@@ -33,19 +33,19 @@ namespace Vega.Controllers
             //     return BadRequest(ModelState);
             // }
 
-            var pojazd = mapper.Map<PojazdResource, Pojazd>(pojazdResource);
+            var pojazd = mapper.Map<SavePojazdResource, Pojazd>(pojazdResource);
             pojazd.OstatniaZmiana = DateTime.Now;
 
             context.Pojazdy.Add(pojazd);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
+            var result = mapper.Map<Pojazd, SavePojazdResource>(pojazd);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePojazd(int id, [FromBody] PojazdResource pojazdResource)
+        public async Task<IActionResult> UpdatePojazd(int id, [FromBody] SavePojazdResource pojazdResource)
         {
             //server side validation
             if (!ModelState.IsValid)                //validation against domain model
@@ -56,12 +56,12 @@ namespace Vega.Controllers
             if(pojazd == null)
                 return NotFound();
 
-            mapper.Map<PojazdResource, Pojazd>(pojazdResource, pojazd);
+            mapper.Map<SavePojazdResource, Pojazd>(pojazdResource, pojazd);
             pojazd.OstatniaZmiana = DateTime.Now;
 
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
+            var result = mapper.Map<Pojazd, SavePojazdResource>(pojazd);
 
             return Ok(result);
         }
@@ -83,7 +83,12 @@ namespace Vega.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPojazd(int id)
         {
-            var pojazd = await context.Pojazdy.Include(p => p.Atrybuty).SingleOrDefaultAsync(p => p.Id == id);
+            var pojazd = await context.Pojazdy
+                .Include(p => p.Atrybuty)
+                    .ThenInclude(pa => pa.Atrybut)
+                .Include(p => p.Model)
+                    .ThenInclude(m => m.Marka)
+                .SingleOrDefaultAsync(p => p.Id == id);
 
             if(pojazd == null)
                 return NotFound();
