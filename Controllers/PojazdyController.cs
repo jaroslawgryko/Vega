@@ -13,10 +13,12 @@ namespace Vega.Controllers
     public class PojazdyController : Controller
     {
         private readonly IMapper mapper;
-        private readonly VegaDbContext context;
-        public PojazdyController(IMapper mapper, VegaDbContext context)
+        private readonly IPojazdRepository repository;
+        private readonly IUnitOfWork unitOfWork;
+        public PojazdyController(IMapper mapper, IPojazdRepository repository, IUnitOfWork unitOfWork)
         {
-            this.context = context;
+            this.unitOfWork = unitOfWork;
+            this.repository = repository;            
             this.mapper = mapper;
         }
 
@@ -36,15 +38,10 @@ namespace Vega.Controllers
             var pojazd = mapper.Map<SavePojazdResource, Pojazd>(pojazdResource);
             pojazd.OstatniaZmiana = DateTime.Now;
 
-            context.Pojazdy.Add(pojazd);
-            await context.SaveChangesAsync();
+            repository.Add(pojazd);
+            await unitOfWork.CompleteAsync();
 
-            pojazd = await context.Pojazdy
-                .Include(p => p.Atrybuty)
-                    .ThenInclude(pa => pa.Atrybut)
-                .Include(p => p.Model)
-                    .ThenInclude(m => m.Marka)
-                .SingleOrDefaultAsync(p => p.Id == pojazd.Id);
+            pojazd = await repository.GetPojazd(pojazd.Id);
 
             var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
@@ -58,21 +55,17 @@ namespace Vega.Controllers
             if (!ModelState.IsValid)                //validation against domain model
                 return BadRequest(ModelState);
 
-            var pojazd = await context.Pojazdy
-                .Include(p => p.Atrybuty)
-                    .ThenInclude(pa => pa.Atrybut)
-                .Include(p => p.Model)
-                    .ThenInclude(m => m.Marka)
-                .SingleOrDefaultAsync(p => p.Id == id);
+            var pojazd = await repository.GetPojazd(id);
 
-            if(pojazd == null)
+            if (pojazd == null)
                 return NotFound();
 
             mapper.Map<SavePojazdResource, Pojazd>(pojazdResource, pojazd);
             pojazd.OstatniaZmiana = DateTime.Now;
 
-            await context.SaveChangesAsync();
+            await unitOfWork.CompleteAsync();
 
+            pojazd = await repository.GetPojazd(pojazd.Id);            
             var result = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
             return Ok(result);
@@ -81,13 +74,12 @@ namespace Vega.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePojazd(int id)
         {
-            var pojazd = await context.Pojazdy.FindAsync(id);
-
-            if(pojazd == null)
+            var pojazd = await repository.GetPojazd(id, includeRelated: false);
+            if (pojazd == null)
                 return NotFound();
 
-            context.Remove(pojazd);
-            await context.SaveChangesAsync();
+            repository.Remove(pojazd);
+            await unitOfWork.CompleteAsync();
 
             return Ok(id);
         }
@@ -95,20 +87,15 @@ namespace Vega.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPojazd(int id)
         {
-            var pojazd = await context.Pojazdy
-                .Include(p => p.Atrybuty)
-                    .ThenInclude(pa => pa.Atrybut)
-                .Include(p => p.Model)
-                    .ThenInclude(m => m.Marka)
-                .SingleOrDefaultAsync(p => p.Id == id);
+            var pojazd = await repository.GetPojazd(id);
 
-            if(pojazd == null)
+            if (pojazd == null)
                 return NotFound();
-            
+
             var pojazdResource = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
             return Ok(pojazdResource);
         }
-        
+
     }
 }
