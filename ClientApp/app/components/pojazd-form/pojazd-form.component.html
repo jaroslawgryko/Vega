@@ -1,16 +1,19 @@
 <h1>Nowy Pojazd</h1>
-<form>
+<p>
+  {{ pojazd | json }}
+</p>
+<form (ngSubmit)="submit()">
   <div class="form-group">
     <label for="marka">Marka</label>
     <select id="marka" class="form-control" 
-        (change)="onMarkaChange()" [(ngModel)]="pojazd.marka" name="marka">
+        (change)="onMarkaChange()" [(ngModel)]="pojazd.markaId" name="markaId">
       <option value=""></option>
       <option *ngFor="let m of marki" value="{{ m.id }}">{{ m.nazwa }}</option>
     </select>
   </div>
   <div class="form-group">
     <label for="model">Model</label>
-    <select id="model" class="form-control">
+    <select id="model" class="form-control" [(ngModel)]="pojazd.modelId" name="modelId">
       <option value=""></option>
       <option *ngFor="let m of modele" value="{{ m.id }}">{{ m.nazwa }}</option>
     </select>
@@ -18,31 +21,31 @@
 
   <p>Czy pojazd jest zarejstrowany?</p>  
   <label for="registered" class="radio-inline">
-    <input type="radio" name="isRegistered" id="registered" value="true">Tak
+    <input type="radio" name="czyZarejestrowany" id="registered" value="true" [(ngModel)]="pojazd.czyZarejestrowany">Tak
   </label>  
   <label for="notRegistered" class="radio-inline">
-    <input type="radio" name="isRegistered" id="notRegistered" value="false">Nie
+    <input type="radio" name="czyZarejestrowany" id="notRegistered" value="false" [(ngModel)]="pojazd.czyZarejestrowany">Nie
   </label>
   
   <h2>Atrybuty</h2>
   <div *ngFor="let a of atrybuty" class="checbox">
     <label for="atrybut{{a.id}}">
-      <input type="checkbox" id="atrybut{{ a.id }}"> {{ a.nazwa }}
+      <input type="checkbox" id="atrybut{{ a.id }}" (change)="onAtrybutToggle(a.id, $event)"> {{ a.nazwa }}
     </label>
   </div>
 
   <h2>Kontakt</h2>
   <div class="form-group">
     <label for="kontaktNazwa">Nazwa</label>
-    <input id="kontaktNazwa" type="text" class="form-control">
+    <input id="kontaktNazwa" type="text" class="form-control" [(ngModel)]="pojazd.kontakt.nazwa" name="kontaktNazwa">
   </div>
   <div class="form-group">
     <label for="kontaktTelefon">Telefon</label>
-    <input id="kontaktTelefon" type="text" class="form-control">
+    <input id="kontaktTelefon" type="text" class="form-control" [(ngModel)]="pojazd.kontakt.telefon" name="kontaktTelefon">
   </div>
   <div class="form-group">
     <label for="kontaktEmail">Email</label>
-    <input id="kontaktEmail" type="text" class="form-control">
+    <input id="kontaktEmail" type="text" class="form-control" [(ngModel)]="pojazd.kontakt.email" name="kontaktEmail">
   </div>
 
   <button class="btn btn-primary">Zapisz</button>
