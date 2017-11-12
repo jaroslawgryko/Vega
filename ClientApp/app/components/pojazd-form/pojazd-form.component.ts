@@ -49,19 +49,6 @@ export class PojazdFormComponent implements OnInit {
 
   submit() {
     this.pojazdService.create(this.pojazd)
-      .subscribe(
-        x => console.log(x),
-        err => {
-          // if (err.status == 400) {            //dla błedów walidacji po stronie serwera
-          // }
-          this.toastyServive.error ({
-            title: 'Error',
-            msg: 'Wystąpił nieoczekiwany błąd.',
-            theme: 'bootstrap',
-            showClose: true,
-            timeout: 5000
-          });
-        }
-      );
+      .subscribe( x => console.log(x));
   }
 }
