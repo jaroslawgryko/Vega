@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { ToastyModule } from 'ng2-toasty';
 
 import { PojazdService } from './components/app/services/pojazd.service';
 
@@ -26,6 +27,7 @@ import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.compon
         CommonModule,
         HttpModule,
         FormsModule,
+        ToastyModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'pojazdy/new', component: PojazdFormComponent },            

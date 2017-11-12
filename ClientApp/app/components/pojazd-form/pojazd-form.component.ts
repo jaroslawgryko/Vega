@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PojazdService } from '../app/services/pojazd.service';
+import { ToastyService } from 'ng2-toasty';
 
 @Component({
   selector: 'app-pojazd-form',
@@ -16,7 +17,9 @@ export class PojazdFormComponent implements OnInit {
   modele: any[];
   atrybuty: any[];
 
-  constructor(private pojazdService: PojazdService) { }
+  constructor(
+    private pojazdService: PojazdService,
+    private toastyServive: ToastyService) { }
 
   ngOnInit() {
     this.pojazdService.getMarki()
@@ -46,6 +49,19 @@ export class PojazdFormComponent implements OnInit {
 
   submit() {
     this.pojazdService.create(this.pojazd)
-      .subscribe(x => console.log(x));
+      .subscribe(
+        x => console.log(x),
+        err => {
+          // if (err.status == 400) {            //dla błedów walidacji po stronie serwera
+          // }
+          this.toastyServive.error ({
+            title: 'Error',
+            msg: 'Wystąpił nieoczekiwany błąd.',
+            theme: 'bootstrap',
+            showClose: true,
+            timeout: 5000
+          });
+        }
+      );
   }
 }
