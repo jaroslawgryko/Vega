@@ -28,6 +28,7 @@ import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.compon
         FormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: 'pojazdy/:id', component: PojazdFormComponent },            
             { path: 'pojazdy/new', component: PojazdFormComponent },            
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },

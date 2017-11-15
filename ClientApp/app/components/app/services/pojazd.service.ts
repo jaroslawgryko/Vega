@@ -21,4 +21,9 @@ export class PojazdService {
         return this.http.post('/api/pojazdy', pojazd)
             .map(res => res.json());
     }
+
+    getPojazd(id: number) {
+        return this.http.get('/api/pojazdy/' + id)
+            .map(res => res.json());
+    }
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PojazdService } from '../app/services/pojazd.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/Observable/forkJoin';
 
 @Component({
   selector: 'app-pojazd-form',
@@ -16,16 +19,37 @@ export class PojazdFormComponent implements OnInit {
   modele: any[];
   atrybuty: any[];
 
-  constructor(private pojazdService: PojazdService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private pojazdService: PojazdService) { 
+
+      route.params.subscribe(p => {
+        this.pojazd.id = +p['id'];
+      });      
+
+    }
 
   ngOnInit() {
-    this.pojazdService.getMarki()
-      .subscribe(marki => {
-        this.marki = marki;
-        console.log("Marki:", this.marki);
-      });
-    this.pojazdService.getAtrybuty()
-      .subscribe(atrybuty => this.atrybuty = atrybuty);    
+
+    var sources = [
+      this.pojazdService.getMarki(),
+      this.pojazdService.getAtrybuty()
+    ];
+
+    if (this.pojazd.id)
+      sources.push(this.pojazdService.getPojazd(this.pojazd.id));
+
+    Observable.forkJoin(sources).subscribe(data => {
+      this.marki = data[0];
+      this.atrybuty = data[1];
+      if (this.pojazd.id)
+        this.pojazd = data[2];
+    }, err => {
+        if (err.status == 404)
+          this.router.navigate(['/home']);  
+    });   
+ 
   }
   
   onMarkaChange(){
