@@ -24,8 +24,6 @@ namespace Vega.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePojazd([FromBody] SavePojazdResource pojazdResource)
         {
-            throw new Exception();
-
             //server side validation
             if (!ModelState.IsValid)                //validation against domain model
                 return BadRequest(ModelState);

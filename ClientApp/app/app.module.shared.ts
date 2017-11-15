@@ -1,9 +1,8 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { ToastyModule } from 'ng2-toasty';
 
 import { PojazdService } from './components/app/services/pojazd.service';
 
@@ -13,7 +12,6 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
-import { AppErrorHandler } from './components/app/app.error-handler';
 
 @NgModule({
     declarations: [
@@ -27,8 +25,7 @@ import { AppErrorHandler } from './components/app/app.error-handler';
     imports: [
         CommonModule,
         HttpModule,
-        FormsModule,        
-        ToastyModule.forRoot(),
+        FormsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'pojazdy/new', component: PojazdFormComponent },            
@@ -39,7 +36,6 @@ import { AppErrorHandler } from './components/app/app.error-handler';
         ])
     ],
     providers: [
-        { provide: ErrorHandler, useClass: AppErrorHandler },
         PojazdService
     ]
 })

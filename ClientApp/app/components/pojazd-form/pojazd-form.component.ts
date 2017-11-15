@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PojazdService } from '../app/services/pojazd.service';
-import { ToastyService } from 'ng2-toasty';
 
 @Component({
   selector: 'app-pojazd-form',
@@ -17,9 +16,7 @@ export class PojazdFormComponent implements OnInit {
   modele: any[];
   atrybuty: any[];
 
-  constructor(
-    private pojazdService: PojazdService,
-    private toastyServive: ToastyService) { }
+  constructor(private pojazdService: PojazdService) { }
 
   ngOnInit() {
     this.pojazdService.getMarki()
@@ -49,6 +46,6 @@ export class PojazdFormComponent implements OnInit {
 
   submit() {
     this.pojazdService.create(this.pojazd)
-      .subscribe( x => console.log(x));
+      .subscribe(x => console.log(x));
   }
 }
