@@ -1,8 +1,12 @@
+import * as _ from 'underscore';
+
+import { Pojazd } from './../app/models/pojazd';
 import { Component, OnInit } from '@angular/core';
 import { PojazdService } from '../app/services/pojazd.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/Observable/forkJoin';
+import { SavePojazd } from '../app/models/pojazd';
 
 @Component({
   selector: 'app-pojazd-form',
@@ -12,9 +16,17 @@ import 'rxjs/add/Observable/forkJoin';
 export class PojazdFormComponent implements OnInit {
 
   marki: any[];
-  pojazd: any = {
+  pojazd: SavePojazd = {
+    id: 0,
+    markaId: 0,
+    modelId: 0,
+    czyZarejstrowany: false,
     atrybuty: [],
-    kontakt: {}
+    kontakt: {
+      nazwa: '',
+      email: '',
+      telefon: ''
+    }
   };
   modele: any[];
   atrybuty: any[];
@@ -43,8 +55,8 @@ export class PojazdFormComponent implements OnInit {
     Observable.forkJoin(sources).subscribe(data => {
       this.marki = data[0];
       this.atrybuty = data[1];
-      if (this.pojazd.id)
-        this.pojazd = data[2];
+      if (this.pojazd.id) 
+        this.setPojazd(data[2]);        
     }, err => {
         if (err.status == 404)
           this.router.navigate(['/home']);  
@@ -52,6 +64,15 @@ export class PojazdFormComponent implements OnInit {
  
   }
   
+  private setPojazd(p: Pojazd) {
+    this.pojazd.id = p.id;
+    this.pojazd.markaId = p.marka.id;
+    this.pojazd.modelId = p.model.id;
+    this.pojazd.czyZarejstrowany = p.czyZarejstrowany;
+    this.pojazd.kontakt = p.kontakt;
+    this.pojazd.atrybuty = _.pluck(p.atrybuty, 'id');
+  }
+
   onMarkaChange(){
     console.log("Pojazd: ", this.pojazd);
     var selectedMarka =  this.marki.find(m => m.id == this.pojazd.markaId);
