@@ -13,7 +13,7 @@ export interface Pojazd {
     id: number;
     model: KeyValuePair;
     marka: KeyValuePair;
-    czyZarejstrowany: boolean;
+    czyZarejestrowany: boolean;
     atrybuty: KeyValuePair[];
     kontakt: Kontakt;
     ostatniaZmiana: string;
@@ -23,7 +23,7 @@ export interface SavePojazd {
     id: number;
     modelId: number;
     markaId: number;
-    czyZarejstrowany: boolean;
+    czyZarejestrowany: boolean;
     atrybuty: number[];
     kontakt: Kontakt;
 }

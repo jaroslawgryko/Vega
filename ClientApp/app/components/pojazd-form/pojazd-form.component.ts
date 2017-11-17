@@ -20,7 +20,7 @@ export class PojazdFormComponent implements OnInit {
     id: 0,
     markaId: 0,
     modelId: 0,
-    czyZarejstrowany: false,
+    czyZarejestrowany: false,
     atrybuty: [],
     kontakt: {
       nazwa: '',
@@ -37,7 +37,7 @@ export class PojazdFormComponent implements OnInit {
     private pojazdService: PojazdService) { 
 
       route.params.subscribe(p => {
-        this.pojazd.id = +p['id'];
+        this.pojazd.id = +p['id'] || 0;
       });      
 
     }
@@ -49,14 +49,19 @@ export class PojazdFormComponent implements OnInit {
       this.pojazdService.getAtrybuty()
     ];
 
-    if (this.pojazd.id)
+    if (this.pojazd.id) {
       sources.push(this.pojazdService.getPojazd(this.pojazd.id));
+    }
 
     Observable.forkJoin(sources).subscribe(data => {
       this.marki = data[0];
       this.atrybuty = data[1];
-      if (this.pojazd.id) 
+      if (this.pojazd.id) {
+        
+
         this.setPojazd(data[2]);        
+        this.populateModele();
+      }
     }, err => {
         if (err.status == 404)
           this.router.navigate(['/home']);  
@@ -68,17 +73,20 @@ export class PojazdFormComponent implements OnInit {
     this.pojazd.id = p.id;
     this.pojazd.markaId = p.marka.id;
     this.pojazd.modelId = p.model.id;
-    this.pojazd.czyZarejstrowany = p.czyZarejstrowany;
+    this.pojazd.czyZarejestrowany = p.czyZarejestrowany;
     this.pojazd.kontakt = p.kontakt;
-    this.pojazd.atrybuty = _.pluck(p.atrybuty, 'id');
+    this.pojazd.atrybuty = _.pluck(p.atrybuty, 'id');    
   }
 
   onMarkaChange(){
-    console.log("Pojazd: ", this.pojazd);
-    var selectedMarka =  this.marki.find(m => m.id == this.pojazd.markaId);
-    this.modele = selectedMarka ? selectedMarka.modele : [];
+    this.populateModele();
     delete this.pojazd.modelId;
   }  
+
+  private populateModele() {    
+    var selectedMarka =  this.marki.find(m => m.id == this.pojazd.markaId);
+    this.modele = selectedMarka ? selectedMarka.modele : [];
+  }
 
   onAtrybutToggle(atrybutId: number, $event: any) {
     if( $event.target.checked)

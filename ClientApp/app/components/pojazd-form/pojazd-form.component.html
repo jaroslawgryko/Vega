@@ -25,16 +25,16 @@
 
   <p>Czy pojazd jest zarejstrowany?</p>  
   <label for="registered" class="radio-inline">
-    <input type="radio" name="czyZarejestrowany" id="registered" value="true" [(ngModel)]="pojazd.czyZarejestrowany">Tak
+    <input type="radio" name="czyZarejestrowany" id="registered" [value]="true" [(ngModel)]="pojazd.czyZarejestrowany">Tak
   </label>  
   <label for="notRegistered" class="radio-inline">
-    <input type="radio" name="czyZarejestrowany" id="notRegistered" value="false" [(ngModel)]="pojazd.czyZarejestrowany">Nie
+    <input type="radio" name="czyZarejestrowany" id="notRegistered" [value]="false" [(ngModel)]="pojazd.czyZarejestrowany">Nie
   </label>
   
   <h2>Atrybuty</h2>
   <div *ngFor="let a of atrybuty" class="checbox">
     <label for="atrybut{{a.id}}">
-      <input type="checkbox" id="atrybut{{ a.id }}" (change)="onAtrybutToggle(a.id, $event)"> {{ a.nazwa }}
+      <input type="checkbox" id="atrybut{{ a.id }}" (change)="onAtrybutToggle(a.id, $event)" [checked]="pojazd.atrybuty.includes(a.id)"> {{ a.nazwa }}
     </label>
   </div>
 
