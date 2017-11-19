@@ -98,7 +98,12 @@ export class PojazdFormComponent implements OnInit {
   }
 
   submit() {
-    this.pojazdService.create(this.pojazd)
-      .subscribe(x => console.log(x));
+    if (this.pojazd.id) {
+      this.pojazdService.update(this.pojazd)
+        .subscribe(x => console.log(x));
+    } else {
+      this.pojazdService.create(this.pojazd)
+        .subscribe(x => console.log(x));
+    }
   }
 }
