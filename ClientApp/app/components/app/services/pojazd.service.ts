@@ -32,4 +32,9 @@ export class PojazdService {
         return this.http.put('api/pojazdy/' + pojazd.id, pojazd)
             .map(res => res.json());
     }
+
+    delete(id: number) {
+        return this.http.delete('/api/pojazdy/' + id)
+            .map(res => res.json());
+    }
 }

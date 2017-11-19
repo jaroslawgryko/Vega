@@ -106,4 +106,13 @@ export class PojazdFormComponent implements OnInit {
         .subscribe(x => console.log(x));
     }
   }
+
+  delete() {
+    if (confirm("Jesteś pewny?")) {
+      this.pojazdService.delete(this.pojazd.id)
+        .subscribe(x => {
+          this.router.navigate(['/home']);
+        });
+    }
+  }
 }
