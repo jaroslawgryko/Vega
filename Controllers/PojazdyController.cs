@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vega.Controllers.Resources;
 using Vega.Core.Models;
 using Vega.Core;
+using System.Collections.Generic;
 
 namespace Vega.Controllers
 {
@@ -94,6 +95,13 @@ namespace Vega.Controllers
             var pojazdResource = mapper.Map<Pojazd, PojazdResource>(pojazd);
 
             return Ok(pojazdResource);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<PojazdResource>> GetPojazdy()
+        {
+            var pojazdy = await repository.GetPojazdy();
+            return mapper.Map<IEnumerable<Pojazd>, IEnumerable<PojazdResource>>(pojazdy);
         }
 
     }
