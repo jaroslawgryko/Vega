@@ -1,0 +1,26 @@
+<h2>Pojazdy</h2>
+<p>
+  <a [routerLink]="['/pojazdy/new']" class="btn btn-primary">Nowy Pojazd</a>
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Marka</th>
+      <th>Model</th>
+      <th>Kontakt Nazwa</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of pojazdy">
+      <td>{{ p.id }}</td>
+      <td>{{ p.marka.nazwa }}</td>
+      <td>{{ p.model.nazwa }}</td>
+      <td>{{ p.kontakt.nazwa }}</td>
+      <td>
+        <a [routerLink]="['/pojazdy/', p.id]">Podgląd</a>
+      </td>
+    </tr>
+  </tbody>
+</table> 

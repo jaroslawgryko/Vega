@@ -12,6 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
+import { PojazdListaComponent } from './components/pojazd-lista/pojazd-lista.component';
 
 @NgModule({
     declarations: [
@@ -20,16 +21,18 @@ import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.compon
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        PojazdFormComponent
+        PojazdFormComponent,
+        PojazdListaComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'pojazdy/:id', component: PojazdFormComponent },            
+            { path: '', redirectTo: 'pojazdy', pathMatch: 'full' },
             { path: 'pojazdy/new', component: PojazdFormComponent },            
+            { path: 'pojazdy/:id', component: PojazdFormComponent },            
+            { path: 'pojazdy', component: PojazdListaComponent },
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
