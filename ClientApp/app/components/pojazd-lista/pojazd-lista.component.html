@@ -2,6 +2,13 @@
 <p>
   <a [routerLink]="['/pojazdy/new']" class="btn btn-primary">Nowy Pojazd</a>
 </p>
+<div class="form-group well">
+  <label for="marka">Marka</label>
+  <select id="marka" class="form-control" [(ngModel)]="filter.markaId" (change)="onFilterChange()">
+    <option value=""></option>
+    <option *ngFor="let m of marki" value="{{ m.id }}">{{ m.nazwa }}</option>
+  </select>  
+</div>
 <table class="table">
   <thead>
     <tr>
