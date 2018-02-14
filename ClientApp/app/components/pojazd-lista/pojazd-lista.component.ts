@@ -10,10 +10,8 @@ import { Pojazd } from '../app/models/pojazd';
 })
 export class PojazdListaComponent implements OnInit {
 
-  pojazdy: Pojazd[];
-  marki: KeyValuePair[];
-
-  allPojazdy: Pojazd[];
+  pojazdy: Pojazd[] = [];
+  marki: KeyValuePair[] = [];
 
   filter: any = {};
 
@@ -23,20 +21,17 @@ export class PojazdListaComponent implements OnInit {
     this.pojazdyService.getMarki()
       .subscribe(marki => this.marki = marki);
 
-    this.pojazdyService.getPojazdy()
-      .subscribe(pojazdy => this.pojazdy = this.allPojazdy = pojazdy);
+    this.populatePojazdy();
+  }
+
+  private populatePojazdy() {
+    this.pojazdyService.getPojazdy(this.filter)
+      .subscribe(pojazdy => this.pojazdy = pojazdy);    
   }
 
   onFilterChange(){
-    var pojazdy = this.allPojazdy;
 
-    if (this.filter.markaId)
-      pojazdy = pojazdy.filter(p => p.marka.id == this.filter.markaId);
-    
-    if (this.filter.modelId)
-      pojazdy = pojazdy.filter(p => p.model.id == this.filter.modelId);
-
-    this.pojazdy = pojazdy;
+    this.populatePojazdy();
   }
 
   resetFilter() {

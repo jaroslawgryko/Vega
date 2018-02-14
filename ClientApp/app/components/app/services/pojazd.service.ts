@@ -30,10 +30,20 @@ export class PojazdService {
             .map(res => res.json());
     }
 
-    getPojazdy() {
-        return this.http.get(this.pojazdyEndpoint)
+    getPojazdy(filter: any) {
+        return this.http.get(this.pojazdyEndpoint + '?' + this.toQueryString(filter))
               .map(res => res.json());        
     }    
+
+    toQueryString(obj: any) {
+        var parts = [];
+        for (var property in obj) {
+            var value = obj[property];
+            if (value != null && value != undefined)
+                parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));                
+        }
+        return parts.join('&');
+    }
 
     update(pojazd: SavePojazd) {
         return this.http.put(this.pojazdyEndpoint +'/' + pojazd.id, pojazd)

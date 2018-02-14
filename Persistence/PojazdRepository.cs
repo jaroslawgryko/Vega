@@ -48,6 +48,10 @@ namespace Vega.Persistence
             if (filter.MarkaId.HasValue)
                 query = query.Where(p => p.Model.MarkaId == filter.MarkaId.Value);
             
+            if (filter.ModelId.HasValue)
+                query = query.Where(p => p.Model.Id == filter.ModelId.Value);
+
+
             return await query.ToListAsync();
      }
     }
