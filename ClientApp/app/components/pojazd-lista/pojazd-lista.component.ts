@@ -39,4 +39,8 @@ export class PojazdListaComponent implements OnInit {
     this.pojazdy = pojazdy;
   }
 
+  resetFilter() {
+    this.filter = {};
+    this.onFilterChange();
+  }
 }
