@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vega.Core;
@@ -35,14 +36,19 @@ namespace Vega.Persistence
             context.Pojazdy.Remove(pojazd);
         }
 
-        public async Task<IEnumerable<Pojazd>> GetPojazdy()
+        public async Task<IEnumerable<Pojazd>> GetPojazdy(Filter filter)
         {
-            return await context.Pojazdy
+            var query = context.Pojazdy
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Marka)
                 .Include(v => v.Atrybuty)
                     .ThenInclude(vf => vf.Atrybut)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (filter.MarkaId.HasValue)
+                query = query.Where(p => p.Model.MarkaId == filter.MarkaId.Value);
+            
+            return await query.ToListAsync();
      }
     }
 }

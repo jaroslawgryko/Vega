@@ -49,6 +49,8 @@ namespace Vega.Mapping
                     p.Atrybuty.Add(a);
 
             });
+
+            CreateMap<FilterResource, Filter>();
         }
     }
 }
