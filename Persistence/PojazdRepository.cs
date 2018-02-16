@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vega.Core;
@@ -36,7 +38,7 @@ namespace Vega.Persistence
             context.Pojazdy.Remove(pojazd);
         }
 
-        public async Task<IEnumerable<Pojazd>> GetPojazdy(Filter filter)
+        public async Task<IEnumerable<Pojazd>> GetPojazdy(PojazdQuery queryObj)
         {
             var query = context.Pojazdy
                 .Include(v => v.Model)
@@ -45,14 +47,54 @@ namespace Vega.Persistence
                     .ThenInclude(vf => vf.Atrybut)
                 .AsQueryable();
 
-            if (filter.MarkaId.HasValue)
-                query = query.Where(p => p.Model.MarkaId == filter.MarkaId.Value);
+            if (queryObj.MarkaId.HasValue)
+                query = query.Where(p => p.Model.MarkaId == queryObj.MarkaId.Value);
             
-            if (filter.ModelId.HasValue)
-                query = query.Where(p => p.Model.Id == filter.ModelId.Value);
+            if (queryObj.ModelId.HasValue)
+                query = query.Where(p => p.Model.Id == queryObj.ModelId.Value);
 
+            // Func<Pojazd, string> func = p => p.KontaktNazwa;  // przykaład użycia funkcji anonimowej 
+            // Expression<Func<Pojazd, string>> wyrazenie = p => p.KontaktNazwa;  // przykład użycia wyrażenia
+
+            // Expression<Func<Pojazd, object>> exp;
+
+            var columnsMap = new Dictionary<string, Expression<Func<Pojazd, object>>>()
+            {
+                ["marka"] = p => p.Model.Marka.Nazwa,
+                ["model"] = p => p.Model.Nazwa,
+                ["kontaktName"] = p => p.KontaktNazwa,
+                ["id"] = p => p.Id
+            };
+
+            // if (queryObj.IsSortAscending)            
+            //     query = query.OrderBy(columnsMap[queryObj.Sortby]);
+            // else
+            //     query = query.OrderByDescending(columnsMap[queryObj.Sortby]);
+
+            // if (queryObj.Sortby == "marka")
+            //     query = (queryObj.IsSortAscending) ? query.OrderBy(p => p.Model.Marka.Nazwa) : query.OrderByDescending(p => p.Model.Marka.Nazwa);
+
+            // if (queryObj.Sortby == "model")
+            //     query = (queryObj.IsSortAscending) ? query.OrderBy(p => p.Model.Nazwa) : query.OrderByDescending(p => p.Model.Nazwa);
+
+            // if (queryObj.Sortby == "kontaktNazwa")
+            //                 query = (queryObj.IsSortAscending) ? query.OrderBy(p => p.KontaktNazwa) : query.OrderByDescending(p => p.KontaktNazwa);
+
+            // if (queryObj.Sortby == "id")
+            //                 query = (queryObj.IsSortAscending) ? query.OrderBy(p => p.Id) : query.OrderByDescending(p => p.Id);
+
+            query = ApplyOrdering(queryObj, query, columnsMap);
 
             return await query.ToListAsync();
      }
+
+     private IQueryable<Pojazd> ApplyOrdering(PojazdQuery queryObj, IQueryable<Pojazd> query, Dictionary<string, Expression<Func<Pojazd, object>>> columnsMap)
+     {
+            if (queryObj.IsSortAscending)            
+                return query = query.OrderBy(columnsMap[queryObj.Sortby]);
+            else
+                return query = query.OrderByDescending(columnsMap[queryObj.Sortby]);
+     }
+
     }
 }

@@ -50,7 +50,7 @@ namespace Vega.Mapping
 
             });
 
-            CreateMap<FilterResource, Filter>();
+            CreateMap<PojazdQueryResource, PojazdQuery>();
         }
     }
 }
