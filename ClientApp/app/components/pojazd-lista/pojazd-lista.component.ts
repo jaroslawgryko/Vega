@@ -13,7 +13,15 @@ export class PojazdListaComponent implements OnInit {
   pojazdy: Pojazd[] = [];
   marki: KeyValuePair[] = [];
 
-  filter: any = {};
+  query: any = {};
+
+  columns = [
+    { title: 'Id' },
+    { title: 'Kontakt', key: 'kontktNazwa', isSortable: true },
+    { title: 'Marka', key: 'marka', isSortable: true },
+    { title: 'Model', key: 'model', isSortable: true },
+    { title: ''}
+  ]
 
   constructor(private pojazdyService: PojazdService) { }
 
@@ -25,7 +33,7 @@ export class PojazdListaComponent implements OnInit {
   }
 
   private populatePojazdy() {
-    this.pojazdyService.getPojazdy(this.filter)
+    this.pojazdyService.getPojazdy(this.query)
       .subscribe(pojazdy => this.pojazdy = pojazdy);    
   }
 
@@ -35,7 +43,18 @@ export class PojazdListaComponent implements OnInit {
   }
 
   resetFilter() {
-    this.filter = {};
+    this.query = {};
     this.onFilterChange();
+  }
+
+  sortBy(columnName: string) {
+    if (this.query.sortBy === columnName) {
+      this.query.isSortAscending = !this.query.isSortAscending;
+    } else {
+      this.query.sortBy = columnName;
+      this.query.isSortAscending = true;
+    }
+
+    this.populatePojazdy();
   }
 }
