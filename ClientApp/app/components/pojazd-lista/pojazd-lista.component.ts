@@ -9,11 +9,15 @@ import { Pojazd } from '../app/models/pojazd';
   styleUrls: ['./pojazd-lista.component.css']
 })
 export class PojazdListaComponent implements OnInit {
+  
+  private readonly PAGE_SIZE = 3; 
 
-  pojazdy: Pojazd[] = [];
+  queryResult: any = {};
   marki: KeyValuePair[] = [];
-
-  query: any = {};
+  
+  query: any = {
+    pageSize: this.PAGE_SIZE
+  };
 
   columns = [
     { title: 'Id' },
@@ -22,6 +26,8 @@ export class PojazdListaComponent implements OnInit {
     { title: 'Model', key: 'model', isSortable: true },
     { title: ''}
   ]
+
+  
 
   constructor(private pojazdyService: PojazdService) { }
 
@@ -34,17 +40,21 @@ export class PojazdListaComponent implements OnInit {
 
   private populatePojazdy() {
     this.pojazdyService.getPojazdy(this.query)
-      .subscribe(pojazdy => this.pojazdy = pojazdy);    
+      .subscribe(result => this.queryResult = result);    
   }
 
   onFilterChange(){
-
+    this.query.page = 1;
+    
     this.populatePojazdy();
   }
 
   resetFilter() {
-    this.query = {};
-    this.onFilterChange();
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+    this.populatePojazdy();
   }
 
   sortBy(columnName: string) {
@@ -57,4 +67,9 @@ export class PojazdListaComponent implements OnInit {
 
     this.populatePojazdy();
   }
+
+  onPageChange(page: number) {
+    this.query.page = page; 
+    this.populatePojazdy();
+  }  
 }

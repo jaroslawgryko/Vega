@@ -12,6 +12,9 @@ namespace Vega.Mapping
         {
             // Domain to API Resources
 
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
+
+
             CreateMap<Marka, MarkaResource>();
             CreateMap<Marka, KeyValuePairResource>();
 
@@ -29,6 +32,8 @@ namespace Vega.Mapping
 
 
             //API Resources to Domain
+            CreateMap<PojazdQueryResource, PojazdQuery>();
+
             CreateMap<SavePojazdResource, Pojazd>()
             .ForMember(p => p.Id, opt => opt.Ignore())
             .ForMember(p => p.KontaktNazwa, opt => opt.MapFrom(pr => pr.Kontakt.Nazwa))

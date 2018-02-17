@@ -31,7 +31,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of pojazdy">
+    <tr *ngFor="let p of queryResult.items">
       <td>{{ p.id }}</td>
       <td>{{ p.marka.nazwa }}</td>
       <td>{{ p.model.nazwa }}</td>
@@ -42,3 +42,5 @@
     </tr>
   </tbody>
 </table> 
+
+<pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></pagination>
