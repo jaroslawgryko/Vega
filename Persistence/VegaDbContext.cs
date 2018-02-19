@@ -9,7 +9,7 @@ namespace Vega.Persistence
     public DbSet<Marka> Marki { get; set; }
     public DbSet<Model> Modele { get; set; }
     public DbSet<Atrybut> Atrybuty { get; set; }
-    
+    public DbSet<Photo> Photos { get; set; }
     public VegaDbContext(DbContextOptions<VegaDbContext> options)
         : base(options)
     {

@@ -23,10 +23,11 @@ namespace Vega.Core.Models
         public string KontaktTelefon { get; set; }
         public DateTime OstatniaZmiana { get; set; }
         public ICollection<PojazdAtrybut> Atrybuty { get; set; }
-
+        public ICollection<Photo> Photos { get; set; }
         public Pojazd()
         {
             Atrybuty = new Collection<PojazdAtrybut>();
-        }
+            Photos = new Collection<Photo>();
+        }        
     }
 }

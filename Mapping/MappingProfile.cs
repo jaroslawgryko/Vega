@@ -12,6 +12,8 @@ namespace Vega.Mapping
         {
             // Domain to API Resources
 
+            CreateMap<Photo, PhotoResource>();
+
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
 
 
