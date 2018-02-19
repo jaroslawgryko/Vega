@@ -1,10 +1,12 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Vega.Controllers.Resources;
 using Vega.Core;
 using Vega.Core.Models;
@@ -19,10 +21,12 @@ namespace Vega.Controllers
         private readonly IHostingEnvironment host;
         private readonly IPojazdRepository repository;
         private readonly IUnitOfWork unitOfWork;
+        private readonly PhotoSettings photoSettings;
         public PhotosController(
             IHostingEnvironment host, IPojazdRepository repository, 
-            IUnitOfWork unitOfWork, IMapper mapper )
+            IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options )
         {
+            this.photoSettings = options.Value;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
             this.repository = repository;
@@ -36,6 +40,11 @@ namespace Vega.Controllers
             var pojazd = await repository.GetPojazd(pojazdId, includeRelated: false);
             if (pojazd == null)
                 return NotFound();
+
+            if (file == null) return BadRequest("Brak pliku");
+            if (file.Length == 0) return BadRequest("Pusty plik");
+            if (file.Length > photoSettings.MaxBytes) return BadRequest("Plik zbyt duży");
+            if (!photoSettings.IsSupported(file.FileName)) return BadRequest("Nieprawidłowy typ pliku");
 
             var uploadsFolderPath = Path.Combine(host.WebRootPath, "uploads");
 
