@@ -1,0 +1,44 @@
+<h1>Pojazd</h1>
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Pojazd</a></li>
+    <li role="presentation"><a href="#photos" aria-controls="photos" role="tab" data-toggle="tab">Zdjęcia</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content" *ngIf="pojazd">
+    <!-- Vehicle tab -->
+    <div role="tabpanel" class="tab-pane active" id="basic">
+      <h2>Podstawowe</h2>
+      <ul>
+        <li>Marka: {{ pojazd.marka.nazwa }}</li>
+        <li>Model: {{ pojazd.model.nazwa }}</li>
+        <li>Zarejestrowany: {{ pojazd.czyZarejestrowany ? 'Tak' : 'Nie' }}
+      </ul>
+      <h2>Atrybuty</h2>
+      <ul>
+        <li *ngFor="let a of pojazd.atrybuty">{{ a.nazwa }}</li>
+      </ul>
+      <h2>Kontakt</h2>
+      <ul>
+        <li>Nazwa: {{ pojazd.kontakt.nazwa }}</li>
+        <li>Telefon: {{ pojazd.kontakt.telefon }}</li>
+        <li>Email: {{ pojazd.kontakt.email }}</li>
+      </ul>
+      <br/>
+      <p>
+        <a class="btn btn-primary" [routerLink]="['/pojazdy/edit/', pojazd.id]">Edytuj</a>
+        <button class="btn btn-danger" (click)="delete()">Usuń</button>
+        <a class="btn btn-default" [routerLink]="['/pojazdy']">Wszystkie pojazdy</a>
+      </p>
+    </div>
+    <!-- Photos tab -->
+    <div role="tabpanel" class="tab-pane" id="photos">
+      <h2>Zdjęcia</h2>
+    </div>
+  </div>
+</div>
+
+

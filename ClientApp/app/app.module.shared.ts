@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { PojazdViewComponent } from './components/pojazd-view/pojazd-view.component';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -14,6 +15,8 @@ import { CounterComponent } from './components/counter/counter.component';
 import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
 import { PojazdListaComponent } from './components/pojazd-lista/pojazd-lista.component';
 import { PaginationComponent } from './components/shared/pagination.component';
+import { ToastyModule } from 'ng2-toasty';
+import { AppErrorHandler } from './app.error.handler';
 
 @NgModule({
     declarations: [
@@ -24,16 +27,19 @@ import { PaginationComponent } from './components/shared/pagination.component';
         HomeComponent,
         PojazdFormComponent,
         PojazdListaComponent,
-        PaginationComponent
+        PaginationComponent,
+        PojazdViewComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
+        ToastyModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'pojazdy', pathMatch: 'full' },
-            { path: 'pojazdy/new', component: PojazdFormComponent },            
-            { path: 'pojazdy/:id', component: PojazdFormComponent },            
+            { path: 'pojazdy/new', component: PojazdFormComponent },           
+            { path: 'pojazdy/edit/:id', component: PojazdFormComponent }, 
+            { path: 'pojazdy/:id', component: PojazdViewComponent },            
             { path: 'pojazdy', component: PojazdListaComponent },
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
@@ -42,6 +48,7 @@ import { PaginationComponent } from './components/shared/pagination.component';
         ])
     ],
     providers: [
+        { provide: ErrorHandler, useClass: AppErrorHandler },
         PojazdService
     ]
 })
