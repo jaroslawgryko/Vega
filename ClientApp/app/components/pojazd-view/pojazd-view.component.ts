@@ -1,7 +1,7 @@
+import { PhotoService } from './../app/services/photo.service';
 import { PojazdService } from './../app/services/pojazd.service';
-import { ToastyService } from 'ng2-toasty';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-pojazd-view',
@@ -13,8 +13,11 @@ export class PojazdViewComponent implements OnInit {
   pojazd: any;
   pojazdId: number;
 
-  constructor(private route: ActivatedRoute, private router: Router,
-              private toasty: ToastyService, private pojazdService: PojazdService) { 
+  @ViewChild('fileInput') fileInput: ElementRef;
+  photos: any[];
+
+  constructor(private route: ActivatedRoute, private router: Router, 
+    private pojazdService: PojazdService, private photoService: PhotoService) { 
 
       route.params.subscribe(p => {
         this.pojazdId = +p['id'];
@@ -26,6 +29,9 @@ export class PojazdViewComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.photoService.getPhotos(this.pojazdId)
+      .subscribe(photos => this.photos = photos);
+
     this.pojazdService.getPojazd(this.pojazdId)
       .subscribe(
         p => this.pojazd = p,
@@ -45,5 +51,14 @@ export class PojazdViewComponent implements OnInit {
         });
     }
   }  
+
+  uploadPhoto () {
+    var nativeElement = this.fileInput.nativeElement;
+
+    this.photoService.upload(this.pojazdId, nativeElement.files[0])
+      .subscribe(photo => {
+        this.photos.push(photo);
+      });
+  }
 
 }

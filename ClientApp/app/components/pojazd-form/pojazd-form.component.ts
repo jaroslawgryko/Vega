@@ -1,4 +1,3 @@
-import { ToastyService } from 'ng2-toasty';
 import * as _ from 'underscore';
 
 import { Pojazd } from './../app/models/pojazd';
@@ -33,8 +32,7 @@ export class PojazdFormComponent implements OnInit {
   atrybuty: any[];
 
   constructor(
-    private route: ActivatedRoute, private router: Router, private pojazdService: PojazdService,
-    private toastyService: ToastyService) { 
+    private route: ActivatedRoute, private router: Router, private pojazdService: PojazdService) { 
 
       route.params.subscribe(p => {
         this.pojazd.id = +p['id'] || 0;
@@ -110,13 +108,6 @@ export class PojazdFormComponent implements OnInit {
   submit() {
     var result$ = (this.pojazd.id) ? this.pojazdService.update(this.pojazd) : this.pojazdService.create(this.pojazd); 
     result$.subscribe(pojazd => {
-      this.toastyService.success({
-        title: 'Success', 
-        msg: 'Data was sucessfully saved.',
-        theme: 'bootstrap',
-        showClose: true,
-        timeout: 5000
-      });
       this.router.navigate(['/pojazdy/', pojazd.id])
     });
   }

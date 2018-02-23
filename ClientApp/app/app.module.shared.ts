@@ -1,3 +1,4 @@
+
 import { PojazdViewComponent } from './components/pojazd-view/pojazd-view.component';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -6,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { PojazdService } from './components/app/services/pojazd.service';
+import { PhotoService } from './components/app/services/photo.service';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -15,8 +17,6 @@ import { CounterComponent } from './components/counter/counter.component';
 import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
 import { PojazdListaComponent } from './components/pojazd-lista/pojazd-lista.component';
 import { PaginationComponent } from './components/shared/pagination.component';
-import { ToastyModule } from 'ng2-toasty';
-import { AppErrorHandler } from './app.error.handler';
 
 @NgModule({
     declarations: [
@@ -34,7 +34,6 @@ import { AppErrorHandler } from './app.error.handler';
         CommonModule,
         HttpModule,
         FormsModule,
-        ToastyModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'pojazdy', pathMatch: 'full' },
             { path: 'pojazdy/new', component: PojazdFormComponent },           
@@ -48,8 +47,7 @@ import { AppErrorHandler } from './app.error.handler';
         ])
     ],
     providers: [
-        { provide: ErrorHandler, useClass: AppErrorHandler },
-        PojazdService
+        PojazdService, PhotoService
     ]
 })
 export class AppModuleShared {
