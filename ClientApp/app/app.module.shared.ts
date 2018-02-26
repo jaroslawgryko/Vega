@@ -3,7 +3,7 @@ import { PojazdViewComponent } from './components/pojazd-view/pojazd-view.compon
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { PojazdService } from './components/app/services/pojazd.service';
@@ -17,6 +17,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { PojazdFormComponent } from './components/pojazd-form/pojazd-form.component';
 import { PojazdListaComponent } from './components/pojazd-lista/pojazd-lista.component';
 import { PaginationComponent } from './components/shared/pagination.component';
+import { BrowserXhrWithProgress, ProgressService } from './components/app/services/progress.service';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,10 @@ import { PaginationComponent } from './components/shared/pagination.component';
         ])
     ],
     providers: [
-        PojazdService, PhotoService
+        {provide: BrowserXhr, useClass: BrowserXhrWithProgress},
+        PojazdService,
+        PhotoService,
+        ProgressService
     ]
 })
 export class AppModuleShared {

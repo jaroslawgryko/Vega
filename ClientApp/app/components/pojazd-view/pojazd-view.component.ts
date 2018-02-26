@@ -1,7 +1,8 @@
+import { ProgressService } from './../app/services/progress.service';
 import { PhotoService } from './../app/services/photo.service';
 import { PojazdService } from './../app/services/pojazd.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-pojazd-view',
@@ -16,8 +17,13 @@ export class PojazdViewComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   photos: any[];
 
-  constructor(private route: ActivatedRoute, private router: Router, 
-    private pojazdService: PojazdService, private photoService: PhotoService) { 
+  progress: any;
+
+  constructor(
+    private zone: NgZone,
+    private route: ActivatedRoute, private router: Router, 
+    private pojazdService: PojazdService, private photoService: PhotoService,
+    private progressService: ProgressService) { 
 
       route.params.subscribe(p => {
         this.pojazdId = +p['id'];
@@ -53,9 +59,22 @@ export class PojazdViewComponent implements OnInit {
   }  
 
   uploadPhoto () {
+    
+    this.progressService.startTracking()
+      .subscribe(progress => {
+          console.log(progress);
+          this.zone.run(() => {
+            this.progress = progress;
+          });        
+        },      
+        () => {this.progress = null}
+      );
+  
     var nativeElement = this.fileInput.nativeElement;
+    var file = nativeElement.files[0];
+    nativeElement.value = '';
 
-    this.photoService.upload(this.pojazdId, nativeElement.files[0])
+    this.photoService.upload(this.pojazdId, file)
       .subscribe(photo => {
         this.photos.push(photo);
       });
