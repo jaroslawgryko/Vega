@@ -1,3 +1,4 @@
+import { AuthService } from './components/app/services/auth.service';
 
 import { PojazdViewComponent } from './components/pojazd-view/pojazd-view.component';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -49,6 +50,7 @@ import { BrowserXhrWithProgress, ProgressService } from './components/app/servic
     ],
     providers: [
         {provide: BrowserXhr, useClass: BrowserXhrWithProgress},
+        AuthService,
         PojazdService,
         PhotoService,
         ProgressService
