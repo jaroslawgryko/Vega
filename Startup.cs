@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Vega.Persistence;
 using Vega.Core;
 using Vega.Core.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Vega
 {
@@ -38,6 +39,19 @@ namespace Vega
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
 
             services.AddMvc();
+
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://sr5jz56x8a.eu.auth0.com/";
+                options.Audience = "https://api.vega.com";
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +71,10 @@ namespace Vega
             }
 
             app.UseStaticFiles();
+
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
+
 
             app.UseMvc(routes =>
             {
